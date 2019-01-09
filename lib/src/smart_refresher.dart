@@ -66,6 +66,7 @@ class SmartRefresher extends StatefulWidget {
     this.enablePullUp: default_enablePullUp,
     this.onRefresh,
     this.onOffsetChange,
+    this.onDidScroll,  
   })  : assert(child != null),
         controller = controller ?? new RefreshController(),this.headerBuilder= headerBuilder ?? ((BuildContext context, int mode){return new ClassicIndicator(mode:mode);}),
         this.footerBuilder= footerBuilder ?? ((BuildContext context, int mode){return new ClassicIndicator(mode:mode);}),
