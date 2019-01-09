@@ -26,10 +26,13 @@ class RefreshStatus {
   static const int noMore = 5;
 }
 
+typedef OnDidScroll(ScrollController controller);
 /*
     This is the most important component that provides drop-down refresh and up loading.
  */
 class SmartRefresher extends StatefulWidget {
+   
+    
   //indicate your listView
   final ScrollView child;
 
@@ -49,7 +52,7 @@ class SmartRefresher extends StatefulWidget {
   final OnOffsetChange onOffsetChange;
   //controll inner state
   final RefreshController controller;
-
+   final OnDidScroll onDidScroll;
   SmartRefresher({
     Key key,
     @required this.child,
@@ -177,6 +180,10 @@ class _SmartRefresherState extends State<SmartRefresher> {
     _scrollController.addListener(_handleOffsetCallback);
     widget.controller._headerMode = topModeLis;
     widget.controller._footerMode = bottomModeLis;
+      
+    if(widget.onDidScroll != null) {
+      widget.onDidScroll(_scrollController);
+    }
   }
 
   void _handleOffsetCallback(){
