@@ -52,6 +52,7 @@ class SmartRefresher extends StatefulWidget {
   final OnOffsetChange onOffsetChange;
   //controll inner state
   final RefreshController controller;
+  final ScrollController scrollController;
    final OnDidScroll onDidScroll;
   SmartRefresher({
     Key key,
@@ -66,14 +67,15 @@ class SmartRefresher extends StatefulWidget {
     this.enablePullUp: default_enablePullUp,
     this.onRefresh,
     this.onOffsetChange,
-    this.onDidScroll,  
+    this.onDidScroll,
+    this.scrollController,
   })  : assert(child != null),
         controller = controller ?? new RefreshController(),this.headerBuilder= headerBuilder ?? ((BuildContext context, int mode){return new ClassicIndicator(mode:mode);}),
         this.footerBuilder= footerBuilder ?? ((BuildContext context, int mode){return new ClassicIndicator(mode:mode);}),
         super(key: key);
 
   @override
-  _SmartRefresherState createState() => new _SmartRefresherState();
+  _SmartRefresherState createState() => new _SmartRefresherState(scrollController);
 }
 
 class _SmartRefresherState extends State<SmartRefresher> {
@@ -91,6 +93,7 @@ class _SmartRefresherState extends State<SmartRefresher> {
   ValueNotifier<int> topModeLis = new ValueNotifier(0);
 
   ValueNotifier<int> bottomModeLis = new ValueNotifier(0);
+  _SmartRefresherState(this._scrollController);
 
   //handle the scrollStartEvent
   bool _handleScrollStart(ScrollStartNotification notification) {
@@ -173,7 +176,9 @@ class _SmartRefresherState extends State<SmartRefresher> {
   }
 
   void _init() {
-    _scrollController = new ScrollController();
+    if(_scrollController==null) {
+      _scrollController = new ScrollController();
+    }
     widget.controller.scrollController = _scrollController;
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _onAfterBuild();
